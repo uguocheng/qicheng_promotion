@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gcnbl.dao.UserAuthenticationDao">
+
+    <resultMap id="UserAuthenticationResultMap" type="com.gcnbl.entity.UserAuthenticationDO">
+        <id column="auth_id" property="authId"/>
+        <result column="user_id" property="userId"/>
+        <result column="real_name" property="realName"/>
+        <result column="id_card_number" property="idCardNumber"/>
+        <result column="id_card_front" property="idCardFront"/>
+        <result column="id_card_back" property="idCardBack"/>
+        <result column="authentication_status" property="authenticationStatus"/>
+        <result column="role_type" property="roleType"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="audit_remark" property="auditRemark"/>
+    </resultMap>
+
+    <select id="findByUserId" resultMap="UserAuthenticationResultMap">
+        SELECT * FROM t_user_authentication WHERE user_id = #{userId}
+    </select>
+
+    <select id="findByIdCardNumber" resultMap="UserAuthenticationResultMap">
+        SELECT * FROM t_user_authentication WHERE id_card_number = #{idCardNumber}
+    </select>
+
+    <select id="findById" resultMap="UserAuthenticationResultMap">
+        SELECT * FROM t_user_authentication WHERE user_id = #{userId}
+    </select>
+
+    <select id="findAll" resultMap="UserAuthenticationResultMap">
+        SELECT * FROM t_user_authentication
+    </select>
+
+    <insert id="insert" parameterType="com.gcnbl.entity.UserAuthenticationDO" useGeneratedKeys="true" keyProperty="authId">
+        INSERT INTO t_user_authentication (user_id, real_name, id_card_number, id_card_front, id_card_back,
+                                          authentication_status, role_type, create_by, create_time,
+                                          update_by, update_time)
+        VALUES (#{userId}, #{realName}, #{idCardNumber}, #{idCardFront}, #{idCardBack},
+                #{authenticationStatus}, #{roleType}, #{createBy}, NOW(),
+                #{updateBy}, NOW())
+    </insert>
+
+    <update id="update" parameterType="com.gcnbl.entity.UserAuthenticationDO">
+        UPDATE t_user_authentication
+        SET real_name = #{realName},
+            id_card_number = #{idCardNumber},
+            id_card_front = #{idCardFront},
+            id_card_back = #{idCardBack},
+            authentication_status = #{authenticationStatus},
+            role_type = #{roleType},
+            audit_remark = #{auditRemark},
+            update_by = #{updateBy},
+            update_time = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
+</mapper>

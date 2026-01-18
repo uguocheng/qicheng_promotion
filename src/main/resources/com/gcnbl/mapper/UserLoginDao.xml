@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gcnbl.dao.UserLoginDao">
+
+    <resultMap id="UserLoginResultMap" type="com.gcnbl.entity.UserLoginDO">
+        <id column="user_id" property="userId"/>
+        <result column="open_id" property="openId"/>
+        <result column="union_id" property="unionId"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="gender" property="gender"/>
+        <result column="language" property="language"/>
+        <result column="city" property="city"/>
+        <result column="role_type" property="roleType"/>
+        <result column="authentication_status" property="authenticationStatus"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="verification_code" property="verificationCode"/>
+        <result column="verification_code_expiry" property="verificationCodeExpiry"/>
+    </resultMap>
+
+    <select id="findByPhoneNumber" resultMap="UserLoginResultMap">
+        SELECT * FROM t_user_login WHERE phone_number = #{phoneNumber}
+    </select>
+
+    <select id="findByOpenId" resultMap="UserLoginResultMap">
+        SELECT * FROM t_user_login WHERE open_id = #{openId}
+    </select>
+
+    <select id="findById" resultMap="UserLoginResultMap">
+        SELECT * FROM t_user_login WHERE user_id = #{userId}
+    </select>
+
+    <update id="update" parameterType="com.gcnbl.entity.UserLoginDO">
+        UPDATE t_user_login
+        <set>
+            <if test="openId != null">open_id = #{openId},</if>
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="avatarUrl != null">avatar_url = #{avatarUrl},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="language != null">language = #{language},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="roleType != null">role_type = #{roleType},</if>
+            <if test="verificationCode != null">verification_code = #{verificationCode},</if>
+            <if test="verificationCodeExpiry != null">verification_code_expiry = #{verificationCodeExpiry},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = NOW()
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+    <insert id="insert" parameterType="com.gcnbl.entity.UserLoginDO" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO t_user_login (open_id, nick_name, avatar_url, gender, language, city,
+                                  role_type, authentication_status, create_by, create_time,
+                                  update_by, update_time)
+        VALUES (#{openId}, #{nickName}, #{avatarUrl}, #{gender}, #{language}, #{city},
+                #{roleType}, #{authenticationStatus}, #{createBy}, NOW(),
+                #{updateBy}, NOW())
+    </insert>
+
+</mapper>
